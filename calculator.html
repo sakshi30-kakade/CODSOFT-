@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Basic Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="calculator">
+    <input type="text" id="display" disabled>
+    <div class="buttons">
+      <button class="btn" onclick="appendNumber(7)">7</button>
+      <button class="btn" onclick="appendNumber(8)">8</button>
+      <button class="btn" onclick="appendNumber(9)">9</button>
+      <button class="btn operator" onclick="setOperator('+')">+</button>
+      
+      <button class="btn" onclick="appendNumber(4)">4</button>
+      <button class="btn" onclick="appendNumber(5)">5</button>
+      <button class="btn" onclick="appendNumber(6)">6</button>
+      <button class="btn operator" onclick="setOperator('-')">-</button>
+      
+      <button class="btn" onclick="appendNumber(1)">1</button>
+      <button class="btn" onclick="appendNumber(2)">2</button>
+      <button class="btn" onclick="appendNumber(3)">3</button>
+      <button class="btn operator" onclick="setOperator('*')">*</button>
+      
+      <button class="btn" onclick="appendNumber(0)">0</button>
+      <button class="btn" onclick="clearDisplay()">C</button>
+      <button class="btn" onclick="calculate()">=</button>
+      <button class="btn operator" onclick="setOperator('/')">/</button>
+    </div>
+  </div>
+
+  <script>
+    // script.js
+
+let currentInput = "";
+let operator = "";
+let previousInput = "";
+
+function appendNumber(number) {
+  // Append the number to the current input or current expression
+  currentInput += number;
+  updateDisplay();
+}
+
+function setOperator(op) {
+  // If currentInput is empty, do nothing
+  if (currentInput === "") return;
+
+  // If there's already an operator, calculate first
+  if (previousInput !== "") {
+    calculate();
+  }
+
+  // Set the operator and clear the current input for the next number
+  operator = op;
+  previousInput = currentInput;
+  currentInput = "";
+  updateDisplay();
+}
+
+function calculate() {
+  if (previousInput === "" || currentInput === "") return;
+
+  let result;
+  switch (operator) {
+    case "+":
+      result = parseFloat(previousInput) + parseFloat(currentInput);
+      break;
+    case "-":
+      result = parseFloat(previousInput) - parseFloat(currentInput);
+      break;
+    case "*":
+      result = parseFloat(previousInput) * parseFloat(currentInput);
+      break;
+    case "/":
+      if (currentInput === "0") {
+        result = "Error";
+      } else {
+        result = parseFloat(previousInput) / parseFloat(currentInput);
+      }
+      break;
+    default:
+      return;
+  }
+
+  // Display the result on the screen
+  currentInput = result.toString();
+  operator = "";
+  previousInput = "";
+  updateDisplay();
+}
+
+function clearDisplay() {
+  currentInput = "";
+  previousInput = "";
+  operator = "";
+  updateDisplay();
+}
+
+function updateDisplay() {
+  // Display the expression (numbers + operator) on the screen
+  let displayValue = previousInput + (operator ? " " + operator + " " : "") + currentInput;
+  document.getElementById('display').value = displayValue;
+}
+
+  </script>
+</body>
+</html>
